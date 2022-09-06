@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'text.dart';
+import '../components/text.dart';
 import 'dart:ui' as ui;
 
 class Description extends StatefulWidget {

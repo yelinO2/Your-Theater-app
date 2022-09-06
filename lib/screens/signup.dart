@@ -14,6 +14,7 @@ class _SignUpState extends State<SignUp> {
   dynamic password;
   dynamic confirmPassword;
   bool hidePassword = true;
+  bool validate = false;
 
   void signUp() {
     final bool? isValid = formKey.currentState?.validate();
@@ -46,7 +47,9 @@ class _SignUpState extends State<SignUp> {
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  autovalidateMode: !validate
+                      ? AutovalidateMode.onUserInteraction
+                      : AutovalidateMode.always,
                   validator: (name) {
                     if (name == null || name.trim().isEmpty) {
                       return "Username can't be empty";
@@ -67,11 +70,13 @@ class _SignUpState extends State<SignUp> {
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  autovalidateMode: !validate
+                      ? AutovalidateMode.onUserInteraction
+                      : AutovalidateMode.always,
                   obscureText: hidePassword,
                   validator: (txt) {
                     if (txt == null || txt.isEmpty) {
-                      return "Invalid password!";
+                      return "Password can't be empty!";
                     }
                     if (txt.length < 8) {
                       return "Password must has 8 characters";
@@ -114,7 +119,9 @@ class _SignUpState extends State<SignUp> {
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  autovalidateMode: !validate
+                      ? AutovalidateMode.onUserInteraction
+                      : AutovalidateMode.always,
                   obscureText: hidePassword,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -150,6 +157,9 @@ class _SignUpState extends State<SignUp> {
                 padding: const EdgeInsets.all(12.0),
                 child: ElevatedButton(
                   onPressed: () async {
+                    setState(() {
+                      validate = true;
+                    });
                     final SharedPreferences sharedPreferences =
                         await SharedPreferences.getInstance();
                     sharedPreferences.setString('name', userName);

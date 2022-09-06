@@ -15,15 +15,15 @@ class _LoginState extends State<Login> {
   dynamic setName;
   dynamic setPassword;
   bool hidePassword = true;
+  bool validate = false;
 
   Future getValidationData() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
-    var getUsername = sharedPreferences.getString('name');
-    var getPassword = sharedPreferences.getString('password');
+
     setState(() {
-      setName = getUsername;
-      setPassword = getPassword;
+      setName = sharedPreferences.getString('name');
+      setPassword = sharedPreferences.getString('password');
     });
 
     // debugPrint(setName);
@@ -60,6 +60,9 @@ class _LoginState extends State<Login> {
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: TextFormField(
+                  autovalidateMode: validate
+                      ? AutovalidateMode.always
+                      : AutovalidateMode.onUserInteraction,
                   validator: (name) {
                     getValidationData();
                     if (name != setName) {
@@ -80,6 +83,9 @@ class _LoginState extends State<Login> {
                 padding: const EdgeInsets.all(12.0),
                 child: TextFormField(
                   obscureText: hidePassword,
+                  autovalidateMode: validate
+                      ? AutovalidateMode.always
+                      : AutovalidateMode.onUserInteraction,
                   validator: (password) {
                     getValidationData();
                     if (password != setPassword) {
@@ -111,6 +117,9 @@ class _LoginState extends State<Login> {
                 padding: const EdgeInsets.all(12.0),
                 child: ElevatedButton(
                   onPressed: () {
+                    setState(() {
+                      validate = true;
+                    });
                     // getValidationData();
                     login();
                   },
